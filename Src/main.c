@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "bsp_led.h"
+// #include "bsp_led.h"
 #include "led_rgb_pwm.h"
 
 /* USER CODE END Includes */
@@ -91,22 +91,11 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_TIM5_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
   ws2812_init();
 
-
-
-  // start tim
-  // ������ʱ��
-  // HAL_TIM_Base_Start(&htim5);
-  // start pwm channel
-  // ����PWMͨ��
-  // HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_1);
-  // HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_2);
-  // HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -116,8 +105,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-    HAL_Delay(1000);
+    ws2812_send();
+    HAL_Delay(100);
     // aRGB_led_show(0x7F123456);
   }
   /* USER CODE END 3 */

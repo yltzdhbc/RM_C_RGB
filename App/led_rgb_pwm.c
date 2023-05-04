@@ -16,9 +16,12 @@ void ws2812_init(void)
     // spi_dma_enable(SPI1, SPI_DMA_TRANSMIT);
     // targetlight_color_refresh();
 
-    for (int i = 0; i < 100; i++)
+    __HAL_DMA_ENABLE_IT(&hdma_tim1_ch1, DMA_IT_HT);
+    __HAL_DMA_ENABLE_IT(&hdma_tim1_ch1, DMA_IT_TC);
+
+    for (int i = 0; i < LED_NUMS; i++)
     {
-        ws2812_set_rgb_node(i, 100, 0, 0);
+        ws2812_set_rgb_node(i, 100, 100, 100);
     }
 
     ws2812_send();
@@ -71,6 +74,8 @@ void ws2812_send(void)
     // ws2812_dma_busy_flag = 1; // 使能dma发送
     // dma_channel_enable(DMA0, DMA_CH4);
 
+    // HAL_TIM_PWM_Stop_DMA(&htim1, TIM_CHANNEL_1);
+    // memset(rgb_dma_buff, 0x00, sizeof(rgb_dma_buff));
     HAL_TIM_PWM_Start_DMA(&htim1, TIM_CHANNEL_1, (uint32_t *)rgb_dma_buff, (LED_DATA_LEN * TOTAL_DMABUFF_LEN));
 }
 
@@ -78,17 +83,19 @@ void led_rgb_irqhandler(void)
 {
     volatile static uint16_t send_nums = 0;
 
+    if (__HAL_DMA_GET_FLAG(&hdma_tim1_ch1, DMA_FLAG_HTIF1_5)) // BANK0
     {
-    if (__HAL_DMA_GET_FLAG(&hdma_tim1_ch1, HAL_DMA_HALF_TRANSFER)) // BANK0
-        __HAL_DMA_CLEAR_FLAG(&hdma_tim1_ch1, HAL_DMA_HALF_TRANSFER);
+        __HAL_DMA_CLEAR_FLAG(&hdma_tim1_ch1, DMA_FLAG_HTIF1_5);
+
         for (int i = 0; i < HALF_DMABUFF_LEN; i++)
         {
             ws2812_write_buff(&rgb_dma_buff[LED_DATA_LEN * i], rgb_buff[send_nums + i][0], rgb_buff[send_nums + i][1], rgb_buff[send_nums + i][2]);
         }
     }
-    else if (__HAL_DMA_GET_FLAG(&hdma_tim1_ch1, HAL_DMA_FULL_TRANSFER)) // BANK1
+    else if (__HAL_DMA_GET_FLAG(&hdma_tim1_ch1, DMA_FLAG_TCIF1_5)) // BANK1
     {
-        __HAL_DMA_CLEAR_FLAG(&hdma_tim1_ch1, HAL_DMA_FULL_TRANSFER);
+        __HAL_DMA_CLEAR_FLAG(&hdma_tim1_ch1, DMA_FLAG_TCIF1_5);
+
         for (int i = 0; i < HALF_DMABUFF_LEN; i++)
         {
             ws2812_write_buff(&rgb_dma_buff[LED_DATA_LEN * (i + HALF_DMABUFF_LEN)], rgb_buff[send_nums + i][0], rgb_buff[send_nums + i][1], rgb_buff[send_nums + i][2]);

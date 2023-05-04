@@ -33,7 +33,6 @@ pwm_light\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 pwm_light\main.o: ../Inc/dma.h
 pwm_light\main.o: ../Inc/tim.h
 pwm_light\main.o: ../Inc/gpio.h
-pwm_light\main.o: ../bsp/boards/bsp_led.h
-pwm_light\main.o: ../bsp/boards/struct_typedef.h
 pwm_light\main.o: ../App/led_rgb_pwm.h
 pwm_light\main.o: ../App/led_rgb_port.h
+pwm_light\main.o: ../bsp/boards/struct_typedef.h
