@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "tim.h": "c",
+        "main.h": "c",
+        "stm32f4xx_hal.h": "c",
+        "stm32f4xx_hal_conf.h": "c",
+        "led_rgb_pwm.h": "c",
+        "led_rgb_port.h": "c"
+    }
+}
