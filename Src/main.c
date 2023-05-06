@@ -20,13 +20,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dma.h"
+#include "spi.h"
 #include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 // #include "bsp_led.h"
-#include "led_rgb_pwm.h"
+#include "led_ws28xx.h"
 
 /* USER CODE END Includes */
 
@@ -85,16 +86,17 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+ 
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_TIM1_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 
-  ws2812_init();
+  ws28xx_init();
 
   /* USER CODE END 2 */
 
@@ -105,8 +107,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    ws2812_send();
-    HAL_Delay(100);
+    ws28xx_send();
+    HAL_Delay(500);
     // aRGB_led_show(0x7F123456);
   }
   /* USER CODE END 3 */
